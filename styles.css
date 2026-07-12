@@ -3,3 +3,40 @@
 @media(max-width:1200px){.container{width:min(1180px,90%)}.main-nav{gap:18px;font-size:13px}.hero h1{font-size:50px}.mission-cards{grid-template-columns:repeat(3,1fr)}.difference-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:960px){.nav-wrap{height:80px}.brand{width:145px}.menu-toggle{display:block}.nav-cta{display:none}.main-nav{display:none;position:absolute;top:80px;left:0;right:0;background:#fff;box-shadow:0 10px 20px rgba(0,0,0,.08);padding:18px 5%;flex-direction:column;align-items:stretch}.main-nav.open{display:flex}.hero{min-height:740px}.hero h1{font-size:44px}.hero-features{grid-template-columns:repeat(2,1fr)}.calculator-layout,.about-grid,.coverage-layout,.operation-grid,.contact-layout{grid-template-columns:1fr}.result-panel{position:static}.form-grid.three{grid-template-columns:repeat(2,1fr)}.service-grid,.difference-grid{grid-template-columns:repeat(2,1fr)}.mission-cards{grid-template-columns:repeat(2,1fr)}.about-image{height:430px}.footer-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.container,.narrow-container{width:90%}.section{padding:78px 0}.hero{min-height:760px;background-position:62% center}.hero-inner{padding-top:70px}.hero h1{font-size:36px}.hero p{font-size:15px}.hero-actions{flex-direction:column;align-items:stretch}.hero-features{margin-top:36px}.section-heading h2,.about-copy h2,.mission-section h2,.operation-grid h2{font-size:31px}.calculator-layout{display:block}.form-panel{padding:22px}.form-grid.two,.form-grid.three,.toggle-grid,.about-cards,.service-grid,.difference-grid,.testimonial-grid,.contact-buttons{grid-template-columns:1fr}.result-panel{margin-top:20px}.mission-cards{grid-template-columns:1fr}.coverage-head{align-items:flex-start;flex-direction:column}.coverage-map svg{height:270px}.quote-form{padding:22px}.footer-grid{grid-template-columns:1fr;gap:35px}.footer-bottom{flex-direction:column;gap:15px}.floating-whatsapp{width:55px;height:55px;right:18px;bottom:18px}.hero-features article{padding:12px}.hero-features span{font-size:12px}}
+
+/* Serviços e cobertura exclusiva da Paraíba */
+.services-pb-section{background:#fff}
+.services-pb-heading{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:55px;align-items:end;margin-bottom:46px}
+.services-pb-heading h2{max-width:760px;margin:9px 0 0;color:var(--navy);font-size:clamp(34px,4vw,54px);line-height:1.12}
+.services-pb-heading>p{margin:0;color:var(--muted);font-size:16px}
+.services-pb-layout{display:grid;grid-template-columns:minmax(460px,.95fr) minmax(560px,1.15fr);gap:28px;align-items:stretch}
+.services-pb-overview{display:grid;grid-template-columns:minmax(225px,.82fr) minmax(260px,1.18fr);border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
+.operation-facts{padding:25px 22px;background:#fff}
+.operation-facts article{display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:start;padding:15px 0;border-bottom:1px solid #f0d4c7}
+.operation-facts article:last-child{border-bottom:0}
+.fact-icon{width:52px;height:52px;border-radius:50%;background:var(--navy);color:var(--orange);display:grid;place-items:center}
+.fact-icon svg{width:27px;height:27px}
+.operation-facts small{display:block;text-transform:uppercase;font-weight:800;color:var(--navy);letter-spacing:.2px}
+.operation-facts strong{display:inline-block;margin-right:7px;font-size:34px;line-height:1;color:var(--orange)}
+.operation-facts p{display:inline;color:#34445f;font-size:13px;margin:0}
+.operation-facts article:not(:first-child) p{display:block;margin-top:3px;line-height:1.42}
+.paraiba-map-card{padding:28px 24px 25px;border-left:1px solid #f0d4c7;background:linear-gradient(180deg,#fff,#fbfcfe)}
+.paraiba-map{width:100%;height:auto;display:block}
+.map-label{fill:#17335f;font-size:13px;font-weight:700;text-anchor:middle;pointer-events:none}
+.map-caption{text-align:center;margin-top:-20px}
+.map-caption h3{margin:0 0 15px;text-transform:uppercase;color:var(--navy);font-size:17px;line-height:1.25}
+.map-caption ul{list-style:none;padding:0;margin:0;display:inline-grid;gap:7px;text-align:left;color:#53647b;font-size:13px}
+.map-caption li{display:flex;align-items:center;gap:9px}
+.region-dot{width:13px;height:13px;border-radius:50%;display:inline-block}.region-dot.sertao{background:#e89ad1}.region-dot.borborema{background:#f2d96b}.region-dot.agreste{background:#91dda5}.region-dot.mata{background:#f1bd91}
+.services-pb-list{display:flex;flex-direction:column;gap:12px}
+.services-pb-list article{display:grid;grid-template-columns:66px 1fr 28px;gap:18px;align-items:center;min-height:107px;padding:18px 19px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 5px 16px rgba(6,31,73,.055);transition:.2s ease}
+.services-pb-list article:hover{transform:translateY(-2px);border-color:#ffc1a5;box-shadow:var(--shadow)}
+.service-list-icon{width:60px;height:60px;border-radius:50%;background:var(--navy);color:var(--orange);display:grid;place-items:center}
+.service-list-icon svg{width:31px;height:31px}
+.services-pb-list h3{margin:0 0 4px;color:var(--navy);font-size:16px;line-height:1.35}
+.services-pb-list p{margin:0;color:#4f6078;font-size:13px;line-height:1.45}
+.service-check{color:var(--orange);width:23px;height:23px}
+@media(max-width:1150px){.services-pb-layout{grid-template-columns:1fr}.services-pb-overview{grid-template-columns:.8fr 1.2fr}}
+@media(max-width:800px){.services-pb-heading{grid-template-columns:1fr;gap:18px}.services-pb-overview{grid-template-columns:1fr}.paraiba-map-card{border-left:0;border-top:1px solid #f0d4c7}.services-pb-list article{grid-template-columns:58px 1fr 24px}.service-list-icon{width:52px;height:52px}.service-list-icon svg{width:27px;height:27px}}
+@media(max-width:520px){.services-pb-heading h2{font-size:31px}.services-pb-list article{grid-template-columns:48px 1fr;padding:16px 14px}.service-list-icon{width:44px;height:44px}.service-list-icon svg{width:23px;height:23px}.service-check{display:none}.operation-facts{padding:18px}.paraiba-map-card{padding:18px 12px 24px}.map-label{font-size:10px}}
+#servicos,#atuacao{scroll-margin-top:125px}
