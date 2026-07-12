@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="JL Express Logística — transporte rodoviário, distribuição regional e soluções logísticas na Paraíba e Nordeste.">
+  <title>JL Express Logística | Sua carga, nosso compromisso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header" id="topo">
+    <div class="container nav-wrap">
+      <a class="brand" href="#inicio" aria-label="JL Express Logística - início">
+        <img src="assets/logo.png" alt="JL Express Logística">
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#quem-somos">Quem somos</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#atuacao">Área de atuação</a>
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#calculadora">Calcular frete</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <a class="btn btn-orange nav-cta" href="#cotacao">Solicitar cotação</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-overlay"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow hero-eyebrow">Transporte rodoviário e gestão logística</span>
+          <h1>Soluções em transporte e logística com <em>segurança, agilidade</em> e compromisso.</h1>
+          <p>A JL Express Logística oferece soluções em transporte rodoviário, distribuição regional e gestão logística, atendendo empresas e operações em toda a Paraíba e em rotas estratégicas do Nordeste.</p>
+          <div class="hero-actions">
+            <a class="btn btn-orange" href="#calculadora"><i data-lucide="calculator"></i> Calcular meu frete</a>
+            <a class="btn btn-outline-light" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Falar com o comercial</a>
+          </div>
+          <div class="hero-features">
+            <article><i data-lucide="truck"></i><span>Transporte<br>rodoviário</span></article>
+            <article><i data-lucide="map-pin"></i><span>Distribuição<br>regional</span></article>
+            <article><i data-lucide="send"></i><span>Rastreamento de<br>entregas</span></article>
+            <article><i data-lucide="headphones"></i><span>Atendimento<br>personalizado</span></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft calculator-section" id="calculadora">
+      <div class="container">
+        <header class="section-heading centered">
+          <span class="eyebrow light-pill"><i data-lucide="calculator"></i> Calculadora de volume</span>
+          <h2>Calcule o volume da sua carga</h2>
+          <p>Informe as medidas, o peso e o destino. Nossa equipe analisará os dados e confirmará o valor do transporte.</p>
+        </header>
+
+        <div class="calculator-layout">
+          <form class="panel form-panel" id="freightForm" novalidate>
+            <fieldset>
+              <legend>Dados da rota</legend>
+              <div class="form-grid two">
+                <label>Estado de coleta
+                  <select id="pickupState" required>
+                    <option value="">UF</option><option>PB</option><option>PE</option><option>RN</option><option>CE</option><option>AL</option><option>SE</option><option>BA</option>
+                  </select>
+                </label>
+                <label>Cidade de coleta
+                  <input id="pickupCity" type="text" placeholder="Ex: Campina Grande" required>
+                </label>
+                <label>CEP de coleta
+                  <input id="pickupZip" type="text" inputmode="numeric" placeholder="00000-000">
+                </label>
+                <label>Estado de entrega
+                  <select id="deliveryState" required>
+                    <option value="">UF</option><option>PB</option><option>PE</option><option>RN</option><option>CE</option><option>AL</option><option>SE</option><option>BA</option>
+                  </select>
+                </label>
+                <label>Cidade de entrega
+                  <input id="deliveryCity" type="text" placeholder="Ex: Recife" required>
+                </label>
+                <label>CEP de entrega
+                  <input id="deliveryZip" type="text" inputmode="numeric" placeholder="00000-000">
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Dados da carga</legend>
+              <div class="form-grid three">
+                <label>Comprimento
+                  <input id="length" type="number" min="0" step="0.01" value="0" required>
+                </label>
+                <label>Largura
+                  <input id="width" type="number" min="0" step="0.01" value="0" required>
+                </label>
+                <label>Altura
+                  <input id="height" type="number" min="0" step="0.01" value="0" required>
+                </label>
+                <label>Unidade de medida
+                  <select id="unit"><option value="cm">Centímetros (cm)</option><option value="m">Metros (m)</option></select>
+                </label>
+                <label>Quantidade de volumes
+                  <input id="quantity" type="number" min="1" step="1" value="1" required>
+                </label>
+                <label>Peso total (kg)
+                  <input id="weight" type="number" min="0" step="0.01" value="0" required>
+                </label>
+                <label>Tipo de mercadoria
+                  <select id="goodsType" required>
+                    <option value="">Selecione</option>
+                    <option>Carga geral</option><option>Alimentos não perecíveis</option><option>Materiais de construção</option><option>Produtos industriais</option><option>Eletroeletrônicos</option><option>Móveis</option><option>Outro</option>
+                  </select>
+                </label>
+                <label>Valor declarado (R$)
+                  <input id="declaredValue" type="text" inputmode="decimal" placeholder="0,00">
+                </label>
+                <label>Data desejada para coleta
+                  <input id="pickupDate" type="date">
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="box-diagram" aria-label="Ilustração de uma caixa com comprimento, largura e altura">
+              <svg viewBox="0 0 420 220" role="img">
+                <polygon points="115,75 235,75 285,40 165,40" fill="#eaf0f8" stroke="#0c346f" stroke-width="3"/>
+                <polygon points="235,75 285,40 285,145 235,180" fill="#d9e4f3" stroke="#0c346f" stroke-width="3"/>
+                <rect x="115" y="75" width="120" height="105" fill="#eef3fa" stroke="#0c346f" stroke-width="3"/>
+                <line x1="115" y1="198" x2="235" y2="198" stroke="#ff5b19" stroke-width="2"/>
+                <line x1="98" y1="75" x2="98" y2="180" stroke="#ff5b19" stroke-width="2"/>
+                <line x1="248" y1="29" x2="286" y2="29" stroke="#ff5b19" stroke-width="2"/>
+                <text x="137" y="216" fill="#ff5b19" font-size="15">Comprimento</text>
+                <text x="77" y="132" fill="#ff5b19" font-size="15" transform="rotate(-90 77 132)">Altura</text>
+                <text x="245" y="22" fill="#ff5b19" font-size="15">Largura</text>
+              </svg>
+            </div>
+
+            <fieldset>
+              <legend>Serviços adicionais</legend>
+              <div class="toggle-grid">
+                <label class="toggle-row">Precisa de ajudante?<input id="helper" type="checkbox"><span class="switch"></span></label>
+                <label class="toggle-row">Precisa de carga ou descarga?<input id="loading" type="checkbox"><span class="switch"></span></label>
+                <label class="toggle-row">É uma carga frágil?<input id="fragile" type="checkbox"><span class="switch"></span></label>
+                <label class="toggle-row">É uma entrega urgente?<input id="urgent" type="checkbox"><span class="switch"></span></label>
+              </div>
+              <label>Observações
+                <textarea id="freightNotes" rows="4" placeholder="Informações adicionais sobre a carga"></textarea>
+              </label>
+            </fieldset>
+
+            <p class="form-error" id="freightError" aria-live="polite"></p>
+            <button class="btn btn-navy full" type="submit"><i data-lucide="calculator"></i> Calcular volume</button>
+          </form>
+
+          <aside class="panel result-panel" aria-live="polite">
+            <div class="result-title"><i data-lucide="package"></i> Resultado</div>
+            <div class="result-total"><small>Volume total</small><strong id="resultVolume">0,000 <span>m³</span></strong></div>
+            <dl class="result-list">
+              <div><dt>Peso real</dt><dd id="resultWeight">—</dd></div>
+              <div><dt>Volumes</dt><dd id="resultQuantity">1</dd></div>
+              <div><dt>Origem</dt><dd id="resultOrigin">—</dd></div>
+              <div><dt>Destino</dt><dd id="resultDestination">—</dd></div>
+              <div><dt>Mercadoria</dt><dd id="resultGoods">—</dd></div>
+            </dl>
+            <div class="result-warning">Cotação sujeita à análise das medidas, peso, tipo de mercadoria, rota e disponibilidade operacional.</div>
+            <a class="btn btn-whatsapp full disabled" id="resultWhatsapp" href="#"><i data-lucide="message-circle"></i> Solicitar valor pelo WhatsApp</a>
+            <button class="btn btn-outline-navy full" id="sendToQuote" type="button"><i data-lucide="send"></i> Enviar para análise</button>
+            <a class="text-link" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="headphones"></i> Falar com o comercial</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="quem-somos">
+      <div class="container about-grid">
+        <img class="about-image" src="assets/about-truck.jpg" alt="Caminhão em uma rodovia durante operação logística">
+        <div class="about-copy">
+          <span class="eyebrow">Quem somos</span>
+          <h2>Especialistas em transporte e logística na Paraíba</h2>
+          <p>A JL Express Logística é uma empresa especializada em transporte rodoviário e gestão logística, com sede em Campina Grande, Paraíba. Contamos com estrutura organizada e equipe qualificada para oferecer soluções seguras, ágeis e eficientes, sempre priorizando a confiança e a satisfação dos nossos clientes e parceiros.</p>
+          <div class="about-cards">
+            <article><i data-lucide="truck"></i><h3>Transporte rodoviário</h3><p>Movimentação de cargas com segurança e eficiência em rotas estratégicas.</p></article>
+            <article><i data-lucide="boxes"></i><h3>Gestão logística</h3><p>Planejamento e organização das operações do início ao destino final.</p></article>
+            <article><i data-lucide="shield-check"></i><h3>Segurança e agilidade</h3><p>Processos cuidadosos aliados a prazos ágeis para cada operação.</p></article>
+            <article><i data-lucide="heart-handshake"></i><h3>Confiança e satisfação</h3><p>Relacionamento próximo, priorizando a satisfação de clientes e parceiros.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mission-section">
+      <div class="container">
+        <span class="eyebrow">Nossa missão</span>
+        <h2>Transporte com pontualidade e responsabilidade</h2>
+        <p>Prestar serviços de transporte e logística com pontualidade, transparência e responsabilidade, garantindo a integridade das cargas e cumprindo rigorosamente os prazos acordados, construindo parcerias sólidas e duradouras.</p>
+        <div class="mission-cards">
+          <article><i data-lucide="clock-3"></i><strong>Pontualidade</strong></article>
+          <article><i data-lucide="eye"></i><strong>Transparência</strong></article>
+          <article><i data-lucide="badge-check"></i><strong>Responsabilidade</strong></article>
+          <article><i data-lucide="package-check"></i><strong>Integridade das cargas</strong></article>
+          <article><i data-lucide="handshake"></i><strong>Parcerias duradouras</strong></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicos">
+      <div class="container">
+        <header class="section-heading centered narrow">
+          <span class="eyebrow">Nossos serviços</span>
+          <h2>Soluções logísticas completas para conectar sua carga ao destino certo</h2>
+        </header>
+        <div class="service-grid">
+          <article><i data-lucide="truck"></i><h3>Transporte rodoviário de cargas em geral</h3><p>Atuação com segurança e eficiência no transporte de diferentes tipos de cargas.</p></article>
+          <article><i data-lucide="map-pin"></i><h3>Distribuição regional e intermunicipal</h3><p>Distribuição em municípios paraibanos e rotas regionais, com agilidade e compromisso.</p></article>
+          <article><i data-lucide="send"></i><h3>Acompanhamento e rastreamento de entregas</h3><p>Monitoramento das operações para proporcionar transparência e segurança em cada etapa.</p></article>
+          <article><i data-lucide="clipboard-list"></i><h3>Atendimento a contratos e operações contínuas</h3><p>Soluções planejadas para contratos, operações recorrentes e demandas empresariais.</p></article>
+          <article class="featured"><i data-lucide="headphones"></i><h3>Suporte logístico personalizado</h3><p>Atendimento próximo e soluções desenvolvidas de acordo com as necessidades de cada cliente.</p></article>
+          <article><i data-lucide="building-2"></i><h3>Operações B2B e B2C</h3><p>Atendimento a empresas e operações destinadas ao consumidor final.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="atuacao">
+      <div class="container">
+        <header class="section-heading centered">
+          <span class="eyebrow">Área de atuação</span>
+          <h2>Presença estratégica no Nordeste</h2>
+          <p>Com sede estratégica em Campina Grande, a JL Express Logística atende toda a Paraíba e realiza operações regionais conforme a necessidade de cada cliente.</p>
+        </header>
+        <div class="coverage-layout">
+          <div class="coverage-map" aria-label="Mapa ilustrativo de cobertura regional">
+            <svg viewBox="0 0 600 480" role="img">
+              <path d="M190 80 L335 65 L410 130 L395 215 L280 245 L205 215 L165 155 Z" fill="#173d75" stroke="#2f64a4" stroke-width="4"/>
+              <path d="M282 145 L355 130 L373 180 L300 192 Z" fill="#ff641e" stroke="#fff" stroke-width="3"/>
+              <path d="M258 190 L374 180 L385 230 L270 245 Z" fill="#2f65ad" stroke="#fff" stroke-width="3"/>
+              <text x="317" y="169" fill="#fff" font-size="22" font-weight="700">PB</text>
+              <text x="307" y="224" fill="#fff" font-size="22" font-weight="700">PE</text>
+              <path d="M180 320 C260 280 345 285 420 320" fill="none" stroke="#ff641e" stroke-width="6" stroke-dasharray="10 10"/>
+              <circle cx="180" cy="320" r="9" fill="#fff"/><circle cx="420" cy="320" r="9" fill="#ff641e"/>
+            </svg>
+            <div class="map-legend"><span><b class="orange"></b>Cobertura principal</span><span><b class="blue"></b>Cobertura regional</span><span><b class="gray"></b>Sob consulta</span></div>
+          </div>
+          <div class="coverage-cards">
+            <article><div class="coverage-head"><h3><i data-lucide="map-pin"></i> Paraíba</h3><span class="tag tag-orange">Cobertura principal</span></div><ul><li>Atendimento em todo o estado</li><li>Cobertura nos 223 municípios paraibanos</li><li>Sertão Paraibano</li><li>Borborema</li><li>Agreste Paraibano</li><li>Mata Paraibana</li></ul></article>
+            <article><div class="coverage-head"><h3><i data-lucide="map-pin"></i> Pernambuco</h3><span class="tag tag-blue">Cobertura regional</span></div><ul><li>Recife</li><li>Caruaru</li><li>Regiões próximas, conforme a operação</li></ul></article>
+            <article><div class="coverage-head"><h3><i data-lucide="map-pin"></i> Nordeste</h3><span class="tag tag-gray">Atendimento sob consulta</span></div><ul><li>Atendimento aos demais estados conforme a demanda e análise operacional</li></ul></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="diferenciais">
+      <div class="container">
+        <header class="section-heading centered"><span class="eyebrow">Diferenciais</span><h2>Por que escolher a JL Express Logística?</h2></header>
+        <div class="difference-grid">
+          <article><i data-lucide="calendar-clock"></i><div><h3>Cumprimento rigoroso dos prazos</h3><p>Compromisso com entregas realizadas dentro do prazo acordado.</p></div></article>
+          <article class="accent"><i data-lucide="shield-check"></i><div><h3>Segurança para a carga transportada</h3><p>Processos e cuidados destinados a preservar a integridade da carga durante a operação.</p></div></article>
+          <article><i data-lucide="zap"></i><div><h3>Atendimento ágil e dedicado</h3><p>Suporte próximo e soluções rápidas para cada necessidade.</p></div></article>
+          <article><i data-lucide="map"></i><div><h3>Conhecimento das rotas do Nordeste</h3><p>Experiência operacional para selecionar trajetos eficientes.</p></div></article>
+          <article><i data-lucide="eye"></i><div><h3>Transparência em todas as etapas</h3><p>Informações claras e acompanhamento da operação.</p></div></article>
+          <article><i data-lucide="wrench"></i><div><h3>Manutenção preventiva</h3><p>Veículos passam por paradas preventivas periódicas para reparos e substituição de componentes.</p></div></article>
+          <article><i data-lucide="user-round-check"></i><div><h3>Atendimento personalizado</h3><p>Soluções logísticas adaptadas às necessidades de cada empresa.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft operation-section">
+      <div class="container operation-grid">
+        <div>
+          <span class="eyebrow">Operação</span>
+          <h2>Como trabalhamos</h2>
+          <ul class="check-list">
+            <li>Entregas realizadas de segunda a sexta-feira, em horário comercial</li>
+            <li>Operações B2B e B2C</li>
+            <li>Veículo operando com um motorista e um operador, conforme a operação</li>
+            <li>Manutenção preventiva periódica</li>
+            <li>Acompanhamento e rastreamento das entregas</li>
+            <li>Atendimento a contratos e operações recorrentes</li>
+            <li>Expansão regional conforme a demanda</li>
+          </ul>
+        </div>
+        <img src="assets/warehouse.jpg" alt="Corredor de armazém com mercadorias organizadas em prateleiras">
+      </div>
+    </section>
+
+    <section class="section section-soft testimonials">
+      <div class="container">
+        <header class="section-heading centered"><span class="eyebrow">Depoimentos</span><h2>O que dizem nossos clientes</h2></header>
+        <div class="testimonial-grid">
+          <article class="skeleton-card"><span>❞</span><i></i><i></i><i class="short"></i><div><b></b><i></i></div></article>
+          <article class="skeleton-card"><span>❞</span><i></i><i></i><i class="short"></i><div><b></b><i></i></div></article>
+          <article class="skeleton-card"><span>❞</span><i></i><i></i><i class="short"></i><div><b></b><i></i></div></article>
+        </div>
+        <p class="muted centered-text">Espaço reservado para depoimentos reais de clientes.</p>
+      </div>
+    </section>
+
+    <section class="section" id="cotacao">
+      <div class="container narrow-container">
+        <header class="section-heading centered"><span class="eyebrow">Cotação</span><h2>Solicite uma cotação</h2><p>Preencha os dados abaixo. Nossa equipe comercial entrará em contato para confirmar as informações e apresentar a cotação.</p></header>
+        <form class="panel quote-form" id="quoteForm" novalidate>
+          <div class="form-grid two">
+            <label>Nome completo *<input id="quoteName" type="text" placeholder="Seu nome" required></label>
+            <label>Nome da empresa<input id="quoteCompany" type="text"></label>
+            <label>CPF ou CNPJ (opcional)<input id="quoteDocument" type="text"></label>
+            <label>Telefone ou WhatsApp *<input id="quotePhone" type="tel" placeholder="(83) 9 0000-0000" required></label>
+            <label>E-mail<input id="quoteEmail" type="email"></label>
+            <label>Tipo de mercadoria<select id="quoteGoods"><option value="">Selecione</option><option>Carga geral</option><option>Alimentos não perecíveis</option><option>Materiais de construção</option><option>Produtos industriais</option><option>Eletroeletrônicos</option><option>Móveis</option><option>Outro</option></select></label>
+            <label>Cidade de coleta<input id="quotePickup" type="text"></label>
+            <label>Cidade de entrega<input id="quoteDelivery" type="text"></label>
+            <label>Quantidade de volumes<input id="quoteQuantity" type="number" min="1"></label>
+            <label>Peso total<input id="quoteWeight" type="number" min="0" step="0.01" placeholder="kg"></label>
+            <label>Volume total<input id="quoteVolume" type="text" placeholder="m³"></label>
+            <label>Data desejada<input id="quoteDate" type="date"></label>
+          </div>
+          <label>Observações<textarea id="quoteNotes" rows="4"></textarea></label>
+          <label class="consent"><input id="quoteConsent" type="checkbox" required> Autorizo o uso dos meus dados para que a JL Express Logística analise e responda à minha solicitação.</label>
+          <p class="form-error" id="quoteError" aria-live="polite"></p>
+          <button class="btn btn-orange full" type="submit"><i data-lucide="send"></i> Enviar solicitação</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contato">
+      <div class="container">
+        <header class="section-heading centered"><span class="eyebrow">Contato</span><h2>Fale com a JL Express Logística</h2></header>
+        <div class="contact-layout">
+          <div class="panel contact-card">
+            <dl>
+              <div><i data-lucide="phone"></i><dt>Comercial — Stenio Ronald</dt><dd>(83) 9 9612-0574</dd></div>
+              <div><i data-lucide="phone"></i><dt>Jaqueline</dt><dd>(83) 9 8700-0574</dd></div>
+              <div><i data-lucide="mail"></i><dt>E-mail</dt><dd>jlexpress.jaqueline@gmail.com</dd></div>
+              <div><i data-lucide="map-pin"></i><dt>Endereço</dt><dd>Avenida Assis Chateaubriand, 4193 – Anexo 04<br>Distrito Industrial — Campina Grande – PB<br>CEP: 58411-450</dd></div>
+            </dl>
+            <div class="contact-buttons">
+              <a class="btn btn-outline-green" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> WhatsApp comercial</a>
+              <a class="btn btn-outline-navy" href="tel:+5583996120574"><i data-lucide="phone"></i> Ligar</a>
+              <a class="btn btn-outline-navy" href="mailto:jlexpress.jaqueline@gmail.com"><i data-lucide="mail"></i> E-mail</a>
+              <a class="btn btn-outline-orange" href="https://www.instagram.com/jlexpresslogistica/" target="_blank" rel="noopener"><i data-lucide="instagram"></i> Instagram</a>
+              <a class="btn btn-outline-navy full" href="https://www.google.com/maps/search/?api=1&query=Avenida+Assis+Chateaubriand+4193+Campina+Grande+PB" target="_blank" rel="noopener"><i data-lucide="navigation"></i> Abrir no mapa</a>
+            </div>
+          </div>
+          <div class="map-frame"><iframe title="Mapa da JL Express Logística" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Avenida%20Assis%20Chateaubriand%204193%20Campina%20Grande%20PB&output=embed"></iframe></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand"><img src="assets/logo.png" alt="JL Express Logística"><p>“Sua carga, nosso compromisso.”</p></div>
+      <div><h3>Links rápidos</h3><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#servicos">Serviços</a><a href="#atuacao">Área de atuação</a><a href="#diferenciais">Diferenciais</a><a href="#calculadora">Calcular frete</a><a href="#contato">Contato</a></div>
+      <div><h3>Contato</h3><p><i data-lucide="phone"></i> (83) 9 9612-0574 · Comercial</p><p><i data-lucide="mail"></i> jlexpress.jaqueline@gmail.com</p><p><i data-lucide="instagram"></i> @jlexpresslogistica</p><p><i data-lucide="map-pin"></i> Avenida Assis Chateaubriand, 4193 – Anexo 04, Distrito Industrial, Campina Grande – PB — CEP 58411-450</p></div>
+      <div><h3>Dados da empresa</h3><p>Jaqueline de Araujo Lima Ltda</p><p>CNPJ: 44.979.347/0001-01</p></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span id="currentYear"></span> JL Express Logística. Todos os direitos reservados.</span><div><a href="#">Política de privacidade</a><a href="#">Termos de uso</a></div></div>
+  </footer>
+
+  <a class="floating-whatsapp" href="https://wa.me/5583996120574" target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><i data-lucide="message-circle"></i></a>
+</body>
+</html>
