@@ -1,339 +1,217 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="JL Express Logística — transporte rodoviário, distribuição regional e soluções logísticas em toda a Paraíba.">
-  <meta name="theme-color" content="#082e67">
-  <title>JL Express Logística | Sua carga, nosso compromisso</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-  <script src="script.js" defer></script>
-</head>
-<body>
-  <header class="site-header" id="topo">
-    <div class="container nav-wrap">
-      <a class="brand" href="#inicio" aria-label="JL Express Logística — início">
-        <img src="assets/logo.png" alt="JL Express Logística">
-      </a>
+'use strict';
 
-      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
-        <i data-lucide="menu"></i>
-      </button>
+const qs = (selector) => document.querySelector(selector);
+const qsa = (selector) => [...document.querySelectorAll(selector)];
+const BR_NUMBER = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
 
-      <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
-        <a href="#inicio">Início</a>
-        <a href="#quem-somos">Quem somos</a>
-        <a href="#servicos">Serviços</a>
-        <a href="#atuacao">Área de atuação</a>
-        <a href="#diferenciais">Diferenciais</a>
-        <a href="#calculadora">Calcular volume</a>
-        <a href="#contato">Contato</a>
-      </nav>
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.lucide) window.lucide.createIcons();
 
-      <a class="btn btn-orange nav-cta" href="#cotacao">Solicitar cotação</a>
-    </div>
-  </header>
+  const currentYear = qs('#currentYear');
+  if (currentYear) currentYear.textContent = new Date().getFullYear();
 
-  <main>
-    <section class="hero" id="inicio">
-      <div class="hero-overlay"></div>
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <span class="eyebrow hero-eyebrow">Transporte rodoviário e gestão logística</span>
-          <h1>Soluções em transporte e logística com <em>segurança, agilidade</em> e compromisso.</h1>
-          <p>A JL Express Logística oferece transporte rodoviário, distribuição regional e gestão logística para empresas e operações em todo o estado da Paraíba.</p>
+  setupMenu();
+  setupMasks();
+  setupCalculator();
+  setupQuoteForm();
+});
 
-          <div class="hero-actions">
-            <a class="btn btn-orange" href="#calculadora"><i data-lucide="calculator"></i> Calcular volume e solicitar cotação</a>
-            <a class="btn btn-outline-light" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Falar com o comercial</a>
-          </div>
+function setupMenu() {
+  const menuToggle = qs('#menuToggle');
+  const mainNav = qs('#mainNav');
+  if (!menuToggle || !mainNav) return;
 
-          <div class="hero-features" aria-label="Principais serviços">
-            <article><i data-lucide="truck"></i><span>Transporte<br>rodoviário</span></article>
-            <article><i data-lucide="map-pin"></i><span>Distribuição<br>regional</span></article>
-            <article><i data-lucide="send"></i><span>Rastreamento de<br>entregas</span></article>
-            <article><i data-lucide="headphones"></i><span>Atendimento<br>personalizado</span></article>
-          </div>
-        </div>
-      </div>
-    </section>
+  menuToggle.addEventListener('click', () => {
+    const open = mainNav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(open));
+  });
 
-    <section class="section" id="quem-somos">
-      <div class="container about-grid">
-        <img class="about-image" src="assets/about-truck.jpg" alt="Caminhão em uma rodovia durante operação logística" loading="lazy">
-        <div class="about-copy">
-          <span class="eyebrow">Quem somos</span>
-          <h2>Especialistas em transporte e logística na Paraíba</h2>
-          <p>A JL Express Logística é uma empresa especializada em transporte rodoviário e gestão logística, com sede em Campina Grande, Paraíba. Nossa equipe oferece soluções seguras, ágeis e eficientes, priorizando a confiança e a satisfação de clientes e parceiros.</p>
+  qsa('#mainNav a').forEach((link) => {
+    link.addEventListener('click', () => {
+      mainNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 
-          <div class="about-cards">
-            <article><i data-lucide="truck"></i><h3>Transporte rodoviário</h3><p>Movimentação de cargas com segurança e eficiência em rotas estratégicas.</p></article>
-            <article><i data-lucide="boxes"></i><h3>Gestão logística</h3><p>Planejamento e organização das operações do início ao destino final.</p></article>
-            <article><i data-lucide="shield-check"></i><h3>Segurança e agilidade</h3><p>Processos cuidadosos aliados a prazos ágeis em cada operação.</p></article>
-            <article><i data-lucide="heart-handshake"></i><h3>Confiança e satisfação</h3><p>Relacionamento próximo e atendimento dedicado.</p></article>
-          </div>
-        </div>
-      </div>
-    </section>
+  document.addEventListener('click', (event) => {
+    if (!mainNav.contains(event.target) && !menuToggle.contains(event.target)) {
+      mainNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
 
-    <section class="mission-section" aria-labelledby="missionTitle">
-      <div class="container">
-        <span class="eyebrow">Nossa missão</span>
-        <h2 id="missionTitle">Transporte com pontualidade e responsabilidade</h2>
-        <p>Prestar serviços de transporte e logística com pontualidade, transparência e responsabilidade, garantindo a integridade das cargas e cumprindo os prazos acordados.</p>
+function setupMasks() {
+  ['#pickupZip', '#deliveryZip'].forEach((selector) => {
+    const input = qs(selector);
+    if (!input) return;
+    input.addEventListener('input', () => {
+      const numbers = input.value.replace(/\D/g, '').slice(0, 8);
+      input.value = numbers.length > 5 ? `${numbers.slice(0, 5)}-${numbers.slice(5)}` : numbers;
+    });
+  });
 
-        <div class="mission-cards">
-          <article><i data-lucide="clock-3"></i><strong>Pontualidade</strong></article>
-          <article><i data-lucide="eye"></i><strong>Transparência</strong></article>
-          <article><i data-lucide="badge-check"></i><strong>Responsabilidade</strong></article>
-          <article><i data-lucide="package-check"></i><strong>Integridade das cargas</strong></article>
-          <article><i data-lucide="handshake"></i><strong>Parcerias duradouras</strong></article>
-        </div>
-      </div>
-    </section>
+  const phone = qs('#quotePhone');
+  if (phone) {
+    phone.addEventListener('input', (event) => {
+      const numbers = event.target.value.replace(/\D/g, '').slice(0, 11);
+      let value = numbers;
+      if (numbers.length > 2) value = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+      if (numbers.length > 7) value = `(${numbers.slice(0, 2)}) ${numbers.slice(2, 3)} ${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+      event.target.value = value;
+    });
+  }
+}
 
-    <section class="section services-section" id="servicos">
-      <div class="container">
-        <header class="section-heading centered">
-          <span class="eyebrow">Nossos serviços</span>
-          <h2>Soluções logísticas para conectar sua carga ao destino certo</h2>
-          <p>Atendimento em todo o estado da Paraíba, com soluções planejadas para empresas, operações recorrentes e diferentes necessidades de transporte.</p>
-        </header>
+function setupCalculator() {
+  const freightForm = qs('#freightForm');
+  if (!freightForm) return;
 
-        <div class="service-grid">
-          <article><i data-lucide="truck"></i><h3>Transporte rodoviário de cargas</h3><p>Transporte de cargas em geral com organização, segurança e acompanhamento da operação.</p></article>
-          <article><i data-lucide="map-pin"></i><h3>Distribuição regional e intermunicipal</h3><p>Cobertura nos 223 municípios paraibanos, dos sertões ao litoral.</p></article>
-          <article><i data-lucide="send"></i><h3>Acompanhamento das entregas</h3><p>Informações e suporte durante as diferentes etapas da operação logística.</p></article>
-          <article><i data-lucide="clipboard-list"></i><h3>Contratos e operações contínuas</h3><p>Planejamento para empresas com demandas recorrentes de coleta e distribuição.</p></article>
-          <article class="featured"><i data-lucide="headphones"></i><h3>Suporte logístico personalizado</h3><p>Atendimento próximo e soluções adaptadas às necessidades de cada cliente.</p></article>
-          <article><i data-lucide="users"></i><h3>Operações B2B e B2C</h3><p>Atendimento a empresas e operações destinadas ao consumidor final.</p></article>
-        </div>
-      </div>
-    </section>
+  let calculatedData = null;
 
-    <section class="mapa-cobertura-section" id="atuacao">
-      <div class="container">
-        <header class="section-heading centered compact-heading">
-          <span class="eyebrow">Área de atuação</span>
-          <h2>Cobertura em todo o estado da Paraíba</h2>
-          <p>O mapa apresenta as mesorregiões e alguns dos principais locais atendidos.</p>
-        </header>
-        <a class="map-link" href="assets/mapa-pb.png" target="_blank" rel="noopener" aria-label="Abrir mapa de cobertura em tamanho maior">
-          <img class="mapa-cobertura-imagem" src="assets/mapa-pb.png" alt="Mapa de cobertura das entregas da JL Express Logística em todo o estado da Paraíba" loading="lazy">
-          <span><i data-lucide="maximize-2"></i> Toque ou clique para ampliar</span>
-        </a>
-      </div>
-    </section>
+  freightForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-    <section class="section" id="diferenciais">
-      <div class="container">
-        <header class="section-heading centered">
-          <span class="eyebrow">Diferenciais</span>
-          <h2>Por que escolher a JL Express Logística?</h2>
-        </header>
+    const length = Number(qs('#length').value);
+    const width = Number(qs('#width').value);
+    const height = Number(qs('#height').value);
+    const quantity = Number(qs('#quantity').value);
+    const weight = Number(qs('#weight').value);
+    const pickupCity = qs('#pickupCity').value.trim();
+    const deliveryCity = qs('#deliveryCity').value.trim();
+    const pickupState = qs('#pickupState').value;
+    const deliveryState = qs('#deliveryState').value;
+    const goods = qs('#goodsType').value;
+    const error = qs('#freightError');
 
-        <div class="difference-grid">
-          <article><i data-lucide="calendar-clock"></i><div><h3>Cumprimento rigoroso dos prazos</h3><p>Compromisso com entregas realizadas dentro do prazo acordado.</p></div></article>
-          <article class="accent"><i data-lucide="shield-check"></i><div><h3>Segurança para a carga transportada</h3><p>Cuidados destinados a preservar a integridade da carga durante a operação.</p></div></article>
-          <article><i data-lucide="zap"></i><div><h3>Atendimento ágil e dedicado</h3><p>Suporte próximo e soluções rápidas para cada necessidade.</p></div></article>
-          <article><i data-lucide="map"></i><div><h3>Conhecimento das rotas da Paraíba</h3><p>Conhecimento regional para selecionar trajetos eficientes em todo o estado.</p></div></article>
-          <article><i data-lucide="eye"></i><div><h3>Transparência em todas as etapas</h3><p>Informações claras e acompanhamento da operação.</p></div></article>
-          <article><i data-lucide="wrench"></i><div><h3>Manutenção preventiva</h3><p>Veículos passam por paradas preventivas periódicas.</p></div></article>
-          <article><i data-lucide="user-round-check"></i><div><h3>Atendimento personalizado</h3><p>Soluções logísticas adaptadas às necessidades de cada empresa.</p></div></article>
-        </div>
-      </div>
-    </section>
+    if (!pickupCity || !deliveryCity || !pickupState || !deliveryState || !goods || length <= 0 || width <= 0 || height <= 0 || quantity < 1 || weight <= 0) {
+      error.textContent = 'Preencha a rota, o tipo de mercadoria e informe medidas, quantidade e peso maiores que zero.';
+      return;
+    }
 
-    <section class="section section-soft calculator-section" id="calculadora">
-      <div class="container">
-        <header class="section-heading centered">
-          <span class="eyebrow light-pill"><i data-lucide="calculator"></i> Calculadora de volume</span>
-          <h2>Calcule o volume da sua carga</h2>
-          <p>Informe as medidas, o peso e o destino. Nossa equipe analisará os dados e confirmará o valor do transporte.</p>
-        </header>
+    error.textContent = '';
+    const divisor = qs('#unit').value === 'cm' ? 100 : 1;
+    const volume = (length / divisor) * (width / divisor) * (height / divisor) * quantity;
 
-        <div class="calculator-layout">
-          <form class="panel form-panel" id="freightForm" novalidate>
-            <fieldset>
-              <legend>Dados da rota</legend>
-              <div class="form-grid two">
-                <label>Estado de coleta
-                  <select id="pickupState" required><option value="">UF</option><option value="PB">PB</option></select>
-                </label>
-                <label>Cidade de coleta<input id="pickupCity" type="text" placeholder="Ex.: Campina Grande" required></label>
-                <label>CEP de coleta<input id="pickupZip" type="text" inputmode="numeric" placeholder="00000-000"></label>
-                <label>Estado de entrega
-                  <select id="deliveryState" required><option value="">UF</option><option value="PB">PB</option></select>
-                </label>
-                <label>Cidade de entrega<input id="deliveryCity" type="text" placeholder="Ex.: João Pessoa" required></label>
-                <label>CEP de entrega<input id="deliveryZip" type="text" inputmode="numeric" placeholder="00000-000"></label>
-              </div>
-            </fieldset>
+    calculatedData = {
+      pickup: `${pickupCity} - ${pickupState}`,
+      destination: `${deliveryCity} - ${deliveryState}`,
+      length,
+      width,
+      height,
+      unit: qs('#unit').value,
+      quantity,
+      weight,
+      goods,
+      volume,
+      declaredValue: qs('#declaredValue').value,
+      pickupDate: qs('#pickupDate').value,
+      helper: qs('#helper').checked,
+      loading: qs('#loading').checked,
+      fragile: qs('#fragile').checked,
+      urgent: qs('#urgent').checked,
+      notes: qs('#freightNotes').value.trim()
+    };
 
-            <fieldset>
-              <legend>Dados da carga</legend>
-              <div class="form-grid three">
-                <label>Comprimento<input id="length" type="number" min="0" step="0.01" placeholder="0" required></label>
-                <label>Largura<input id="width" type="number" min="0" step="0.01" placeholder="0" required></label>
-                <label>Altura<input id="height" type="number" min="0" step="0.01" placeholder="0" required></label>
-                <label>Unidade de medida<select id="unit"><option value="cm">Centímetros (cm)</option><option value="m">Metros (m)</option></select></label>
-                <label>Quantidade de volumes<input id="quantity" type="number" min="1" step="1" value="1" required></label>
-                <label>Peso total (kg)<input id="weight" type="number" min="0" step="0.01" placeholder="0" required></label>
-                <label>Tipo de mercadoria
-                  <select id="goodsType" required>
-                    <option value="">Selecione</option>
-                    <option>Carga geral</option><option>Alimentos não perecíveis</option><option>Materiais de construção</option><option>Produtos industriais</option><option>Eletroeletrônicos</option><option>Móveis</option><option>Outro</option>
-                  </select>
-                </label>
-                <label>Valor declarado (R$)<input id="declaredValue" type="text" inputmode="decimal" placeholder="0,00"></label>
-                <label>Data desejada para coleta<input id="pickupDate" type="date"></label>
-              </div>
-            </fieldset>
+    qs('#resultVolume').innerHTML = `${BR_NUMBER.format(volume)} <span>m³</span>`;
+    qs('#resultWeight').textContent = `${weight.toLocaleString('pt-BR')} kg`;
+    qs('#resultQuantity').textContent = String(quantity);
+    qs('#resultOrigin').textContent = calculatedData.pickup;
+    qs('#resultDestination').textContent = calculatedData.destination;
+    qs('#resultGoods').textContent = goods;
 
-            <div class="box-diagram" aria-label="Ilustração de uma caixa com comprimento, largura e altura">
-              <svg viewBox="0 0 420 220" role="img" aria-hidden="true">
-                <polygon points="115,75 235,75 285,40 165,40" fill="#eaf0f8" stroke="#0c346f" stroke-width="3"/>
-                <polygon points="235,75 285,40 285,145 235,180" fill="#d9e4f3" stroke="#0c346f" stroke-width="3"/>
-                <rect x="115" y="75" width="120" height="105" fill="#eef3fa" stroke="#0c346f" stroke-width="3"/>
-                <line x1="115" y1="198" x2="235" y2="198" stroke="#ff5b19" stroke-width="2"/>
-                <line x1="98" y1="75" x2="98" y2="180" stroke="#ff5b19" stroke-width="2"/>
-                <line x1="248" y1="29" x2="286" y2="29" stroke="#ff5b19" stroke-width="2"/>
-                <text x="137" y="216" fill="#ff5b19" font-size="15">Comprimento</text>
-                <text x="77" y="132" fill="#ff5b19" font-size="15" transform="rotate(-90 77 132)">Altura</text>
-                <text x="245" y="22" fill="#ff5b19" font-size="15">Largura</text>
-              </svg>
-            </div>
+    const unitLabel = calculatedData.unit === 'cm' ? 'cm' : 'm';
+    const message = [
+      'Olá! Gostaria de solicitar uma cotação com a JL Express Logística.',
+      '',
+      `Origem: ${calculatedData.pickup}`,
+      `Destino: ${calculatedData.destination}`,
+      `Mercadoria: ${goods}`,
+      `Medidas: ${length} x ${width} x ${height} ${unitLabel}`,
+      `Quantidade de volumes: ${quantity}`,
+      `Volume total: ${BR_NUMBER.format(volume)} m³`,
+      `Peso total: ${weight.toLocaleString('pt-BR')} kg`,
+      calculatedData.declaredValue ? `Valor declarado: R$ ${calculatedData.declaredValue}` : '',
+      calculatedData.pickupDate ? `Data desejada: ${formatDate(calculatedData.pickupDate)}` : '',
+      `Ajudante: ${calculatedData.helper ? 'Sim' : 'Não'}`,
+      `Carga/descarga: ${calculatedData.loading ? 'Sim' : 'Não'}`,
+      `Carga frágil: ${calculatedData.fragile ? 'Sim' : 'Não'}`,
+      `Urgente: ${calculatedData.urgent ? 'Sim' : 'Não'}`,
+      calculatedData.notes ? `Observações: ${calculatedData.notes}` : ''
+    ].filter(Boolean).join('\n');
 
-            <fieldset>
-              <legend>Serviços adicionais</legend>
-              <div class="toggle-grid">
-                <label class="toggle-row">Precisa de ajudante?<input id="helper" type="checkbox"><span class="switch"></span></label>
-                <label class="toggle-row">Precisa de carga ou descarga?<input id="loading" type="checkbox"><span class="switch"></span></label>
-                <label class="toggle-row">É uma carga frágil?<input id="fragile" type="checkbox"><span class="switch"></span></label>
-                <label class="toggle-row">É uma entrega urgente?<input id="urgent" type="checkbox"><span class="switch"></span></label>
-              </div>
-              <label>Observações<textarea id="freightNotes" rows="4" placeholder="Informações adicionais sobre a carga"></textarea></label>
-            </fieldset>
+    const whatsapp = qs('#resultWhatsapp');
+    whatsapp.href = `https://wa.me/5583996120574?text=${encodeURIComponent(message)}`;
+    whatsapp.classList.remove('disabled');
+    qs('.result-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
 
-            <p class="form-error" id="freightError" aria-live="polite"></p>
-            <button class="btn btn-navy full" type="submit"><i data-lucide="calculator"></i> Calcular volume</button>
-          </form>
+  const sendToQuote = qs('#sendToQuote');
+  if (sendToQuote) {
+    sendToQuote.addEventListener('click', () => {
+      if (calculatedData) {
+        qs('#quoteGoods').value = calculatedData.goods;
+        qs('#quotePickup').value = calculatedData.pickup;
+        qs('#quoteDelivery').value = calculatedData.destination;
+        qs('#quoteQuantity').value = calculatedData.quantity;
+        qs('#quoteWeight').value = calculatedData.weight;
+        qs('#quoteVolume').value = BR_NUMBER.format(calculatedData.volume);
+        qs('#quoteDate').value = calculatedData.pickupDate;
+        qs('#quoteNotes').value = calculatedData.notes;
+      }
+      qs('#cotacao').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+}
 
-          <aside class="panel result-panel" aria-live="polite">
-            <div class="result-title"><i data-lucide="package"></i> Resultado</div>
-            <div class="result-total"><small>Volume total</small><strong id="resultVolume">0,000 <span>m³</span></strong></div>
-            <dl class="result-list">
-              <div><dt>Peso real</dt><dd id="resultWeight">—</dd></div>
-              <div><dt>Volumes</dt><dd id="resultQuantity">1</dd></div>
-              <div><dt>Origem</dt><dd id="resultOrigin">—</dd></div>
-              <div><dt>Destino</dt><dd id="resultDestination">—</dd></div>
-              <div><dt>Mercadoria</dt><dd id="resultGoods">—</dd></div>
-            </dl>
-            <div class="result-warning">Cotação sujeita à análise das medidas, peso, tipo de mercadoria, rota e disponibilidade operacional.</div>
-            <a class="btn btn-whatsapp full disabled" id="resultWhatsapp" href="#"><i data-lucide="message-circle"></i> Solicitar valor pelo WhatsApp</a>
-            <button class="btn btn-outline-navy full" id="sendToQuote" type="button"><i data-lucide="send"></i> Enviar para análise</button>
-            <a class="text-link" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="headphones"></i> Falar com o comercial</a>
-          </aside>
-        </div>
-      </div>
-    </section>
+function setupQuoteForm() {
+  const quoteForm = qs('#quoteForm');
+  if (!quoteForm) return;
 
-    <section class="section operation-section" aria-labelledby="operationTitle">
-      <div class="container operation-grid">
-        <div>
-          <span class="eyebrow">Operação</span>
-          <h2 id="operationTitle">Como trabalhamos</h2>
-          <ul class="check-list">
-            <li>Entregas realizadas de segunda a sexta-feira, em horário comercial</li>
-            <li>Operações B2B e B2C</li>
-            <li>Veículo com um motorista e um operador, conforme a operação</li>
-            <li>Manutenção preventiva periódica</li>
-            <li>Acompanhamento e rastreamento das entregas</li>
-            <li>Atendimento a contratos e operações recorrentes</li>
-            <li>Cobertura em todo o estado da Paraíba</li>
-          </ul>
-        </div>
+  quoteForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-        <div class="operation-photo-placeholder">
-          <i data-lucide="image"></i>
-          <strong>Foto da operação em breve</strong>
-          <span>Este espaço receberá uma imagem real da JL Express Logística.</span>
-        </div>
-      </div>
-    </section>
+    const name = qs('#quoteName').value.trim();
+    const phone = qs('#quotePhone').value.trim();
+    const consent = qs('#quoteConsent').checked;
+    const error = qs('#quoteError');
 
-    <section class="section section-soft" id="cotacao">
-      <div class="container narrow-container">
-        <header class="section-heading centered">
-          <span class="eyebrow">Cotação</span>
-          <h2>Solicite uma cotação</h2>
-          <p>Preencha os dados abaixo. Nossa equipe comercial entrará em contato para confirmar as informações e apresentar a cotação.</p>
-        </header>
+    if (!name || !phone || !consent) {
+      error.textContent = 'Informe seu nome, telefone e marque a autorização para enviar a solicitação.';
+      return;
+    }
 
-        <form class="panel quote-form" id="quoteForm" novalidate>
-          <div class="form-grid two">
-            <label>Nome completo *<input id="quoteName" type="text" placeholder="Seu nome" required></label>
-            <label>Nome da empresa<input id="quoteCompany" type="text"></label>
-            <label>CPF ou CNPJ (opcional)<input id="quoteDocument" type="text"></label>
-            <label>Telefone ou WhatsApp *<input id="quotePhone" type="tel" placeholder="(83) 9 0000-0000" required></label>
-            <label>E-mail<input id="quoteEmail" type="email"></label>
-            <label>Tipo de mercadoria
-              <select id="quoteGoods"><option value="">Selecione</option><option>Carga geral</option><option>Alimentos não perecíveis</option><option>Materiais de construção</option><option>Produtos industriais</option><option>Eletroeletrônicos</option><option>Móveis</option><option>Outro</option></select>
-            </label>
-            <label>Cidade de coleta<input id="quotePickup" type="text"></label>
-            <label>Cidade de entrega<input id="quoteDelivery" type="text"></label>
-            <label>Quantidade de volumes<input id="quoteQuantity" type="number" min="1"></label>
-            <label>Peso total<input id="quoteWeight" type="number" min="0" step="0.01" placeholder="kg"></label>
-            <label>Volume total<input id="quoteVolume" type="text" placeholder="m³"></label>
-            <label>Data desejada<input id="quoteDate" type="date"></label>
-          </div>
-          <label>Observações<textarea id="quoteNotes" rows="4"></textarea></label>
-          <label class="consent"><input id="quoteConsent" type="checkbox" required> Autorizo o uso dos meus dados para que a JL Express Logística analise e responda à minha solicitação.</label>
-          <p class="form-error" id="quoteError" aria-live="polite"></p>
-          <button class="btn btn-orange full" type="submit"><i data-lucide="send"></i> Enviar solicitação</button>
-        </form>
-      </div>
-    </section>
+    error.textContent = '';
 
-    <section class="section contact-section" id="contato">
-      <div class="container">
-        <header class="section-heading centered"><span class="eyebrow">Contato</span><h2>Fale com a JL Express Logística</h2></header>
-        <div class="contact-layout">
-          <div class="panel contact-card">
-            <dl>
-              <div><i data-lucide="phone"></i><dt>Comercial — Stenio Ronald</dt><dd>(83) 9 9612-0574</dd></div>
-              <div><i data-lucide="phone"></i><dt>Jaqueline</dt><dd>(83) 9 8700-0574</dd></div>
-              <div><i data-lucide="mail"></i><dt>E-mail</dt><dd>jlexpress.jaqueline@gmail.com</dd></div>
-              <div><i data-lucide="map-pin"></i><dt>Endereço</dt><dd>Avenida Assis Chateaubriand, 4193 — Anexo 04<br>Distrito Industrial — Campina Grande — PB<br>CEP: 58411-450</dd></div>
-            </dl>
-            <div class="contact-buttons">
-              <a class="btn btn-outline-green" href="https://wa.me/5583996120574" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> WhatsApp comercial</a>
-              <a class="btn btn-outline-navy" href="tel:+5583996120574"><i data-lucide="phone"></i> Ligar</a>
-              <a class="btn btn-outline-navy" href="mailto:jlexpress.jaqueline@gmail.com"><i data-lucide="mail"></i> E-mail</a>
-              <a class="btn btn-outline-orange" href="https://www.instagram.com/jlexpresslogistica/" target="_blank" rel="noopener"><i data-lucide="instagram"></i> Instagram</a>
-              <a class="btn btn-outline-navy full" href="https://www.google.com/maps/search/?api=1&query=Avenida+Assis+Chateaubriand+4193+Campina+Grande+PB" target="_blank" rel="noopener"><i data-lucide="navigation"></i> Abrir no mapa</a>
-            </div>
-          </div>
-          <div class="map-frame"><iframe title="Mapa da JL Express Logística" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Avenida%20Assis%20Chateaubriand%204193%20Campina%20Grande%20PB&output=embed"></iframe></div>
-        </div>
-      </div>
-    </section>
-  </main>
+    const lines = [
+      'Olá! Gostaria de enviar uma solicitação de cotação para a JL Express Logística.',
+      '',
+      `Nome: ${name}`,
+      optionalLine('Empresa', qs('#quoteCompany').value),
+      optionalLine('CPF/CNPJ', qs('#quoteDocument').value),
+      `Telefone: ${phone}`,
+      optionalLine('E-mail', qs('#quoteEmail').value),
+      qs('#quoteGoods').value ? `Mercadoria: ${qs('#quoteGoods').value}` : '',
+      optionalLine('Cidade de coleta', qs('#quotePickup').value),
+      optionalLine('Cidade de entrega', qs('#quoteDelivery').value),
+      qs('#quoteQuantity').value ? `Volumes: ${qs('#quoteQuantity').value}` : '',
+      qs('#quoteWeight').value ? `Peso total: ${qs('#quoteWeight').value} kg` : '',
+      optionalLine('Volume total', qs('#quoteVolume').value, ' m³'),
+      qs('#quoteDate').value ? `Data desejada: ${formatDate(qs('#quoteDate').value)}` : '',
+      optionalLine('Observações', qs('#quoteNotes').value)
+    ].filter(Boolean).join('\n');
 
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div class="footer-brand"><img src="assets/logo.png" alt="JL Express Logística"><p>“Sua carga, nosso compromisso.”</p></div>
-      <div><h3>Links rápidos</h3><a href="#inicio">Início</a><a href="#quem-somos">Quem somos</a><a href="#servicos">Serviços</a><a href="#atuacao">Área de atuação</a><a href="#diferenciais">Diferenciais</a><a href="#calculadora">Calcular volume</a><a href="#contato">Contato</a></div>
-      <div><h3>Contato</h3><p><i data-lucide="phone"></i> (83) 9 9612-0574 · Comercial</p><p><i data-lucide="mail"></i> jlexpress.jaqueline@gmail.com</p><p><i data-lucide="instagram"></i> @jlexpresslogistica</p><p><i data-lucide="map-pin"></i> Avenida Assis Chateaubriand, 4193 — Anexo 04, Distrito Industrial, Campina Grande — PB — CEP 58411-450</p></div>
-      <div><h3>Dados da empresa</h3><p>Jaqueline de Araujo Lima Ltda</p><p>CNPJ: 44.979.347/0001-01</p></div>
-    </div>
-    <div class="container footer-bottom"><span>© <span id="currentYear"></span> JL Express Logística. Todos os direitos reservados.</span></div>
-  </footer>
+    window.open(`https://wa.me/5583996120574?text=${encodeURIComponent(lines)}`, '_blank', 'noopener,noreferrer');
+  });
+}
 
-  <a class="floating-whatsapp" href="https://wa.me/5583996120574" target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><i data-lucide="message-circle"></i></a>
-</body>
-</html>
+function optionalLine(label, value, suffix = '') {
+  const text = String(value || '').trim();
+  return text ? `${label}: ${text}${suffix}` : '';
+}
+
+function formatDate(value) {
+  if (!value) return '';
+  const [year, month, day] = value.split('-');
+  return `${day}/${month}/${year}`;
+}
