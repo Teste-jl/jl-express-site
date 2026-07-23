@@ -38,6 +38,118 @@
         src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
         defer
     ></script>
+
+    <style>
+        .tracking-result {
+            margin-top: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tracking-result[hidden] {
+            display: none;
+        }
+
+        .tracking-result-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tracking-result-header svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .tracking-result-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .tracking-code-result {
+            margin: 4px 0 0;
+            font-size: 0.85rem;
+            opacity: 0.75;
+        }
+
+        .tracking-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 122, 0, 0.15);
+            font-weight: 700;
+        }
+
+        .tracking-result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .tracking-result-item {
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tracking-result-item span {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.78rem;
+            opacity: 0.7;
+        }
+
+        .tracking-result-item strong {
+            display: block;
+            overflow-wrap: anywhere;
+        }
+
+        .tracking-result-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .tracking-message {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .tracking-loading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tracking-loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: tracking-spin 0.8s linear infinite;
+        }
+
+        @keyframes tracking-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .tracking-result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tracking-result-item.full {
+                grid-column: auto;
+            }
+        }
+    </style>
 </head>
 
 <body class="tracking-page">
@@ -96,10 +208,9 @@
                     </h1>
 
                     <p>
-                        <p>
-    Informe o código de rastreio recebido no momento
-    da contratação para consultar o andamento da carga.
-</p>
+                        Informe o código de rastreio recebido no momento
+                        da contratação para consultar o andamento da carga.
+                    </p>
 
                     <div class="tracking-page-benefits">
 
@@ -123,44 +234,51 @@
                 </div>
 
                 <form
-    class="tracking-page-card"
-    id="trackingForm"
->
-    <div class="tracking-field">
-        <label for="trackingCode">
-            Código de rastreio
-        </label>
+                    class="tracking-page-card"
+                    id="trackingForm"
+                >
 
-        <input
-            id="trackingCode"
-            type="text"
-            placeholder="Ex.: JL-2026-CG0047"
-            autocomplete="off"
-            required
-        >
-    </div>
+                    <div class="tracking-field">
 
-    <button
-        class="btn btn-orange full"
-        type="submit"
-    >
-        <i data-lucide="search"></i>
-        Consultar entrega
-    </button>
+                        <label for="trackingCode">
+                            Código de rastreio
+                        </label>
 
-    <p
-        class="form-error"
-        id="trackingError"
-        aria-live="polite"
-    ></p>
+                        <input
+                            id="trackingCode"
+                            type="text"
+                            placeholder="Ex.: JL7K9P2X"
+                            autocomplete="off"
+                            autocapitalize="characters"
+                            spellcheck="false"
+                            minlength="8"
+                            maxlength="40"
+                            required
+                        >
 
-    <div
-        class="tracking-result"
-        id="trackingResult"
-        hidden
-    ></div>
+                    </div>
 
-</form>
+                    <button
+                        class="btn btn-orange full"
+                        id="trackingButton"
+                        type="submit"
+                    >
+                        <i data-lucide="search"></i>
+                        <span>Consultar entrega</span>
+                    </button>
+
+                    <p
+                        class="form-error"
+                        id="trackingError"
+                        aria-live="polite"
+                    ></p>
+
+                    <div
+                        class="tracking-result"
+                        id="trackingResult"
+                        aria-live="polite"
+                        hidden
+                    ></div>
 
                 </form>
 
@@ -170,54 +288,263 @@
 
     </main>
 
-    <script>
-    
-    document.addEventListener("DOMContentLoaded", function () {
-        if (window.lucide) {
-            lucide.createIcons();
-        }
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+
+        import {
+            getFirestore,
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCARu-R7IC6AVT8tO-6DscxWXduRuz8tNc",
+            authDomain: "jl-express-rastreio-2026-jl.firebaseapp.com",
+            projectId: "jl-express-rastreio-2026-jl",
+            storageBucket: "jl-express-rastreio-2026-jl.firebasestorage.app",
+            messagingSenderId: "868088045164",
+            appId: "1:868088045164:web:7f2d719775b06fad31c249"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         const form = document.getElementById("trackingForm");
         const trackingCode = document.getElementById("trackingCode");
-        const error = document.getElementById("trackingError");
+        const trackingButton = document.getElementById("trackingButton");
+        const errorMessage = document.getElementById("trackingError");
         const result = document.getElementById("trackingResult");
 
+        function updateIcons() {
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp || typeof timestamp.toDate !== "function") {
+                return "Não informada";
+            }
+
+            return timestamp.toDate().toLocaleString("pt-BR", {
+                timeZone: "America/Fortaleza",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        function setLoading(isLoading) {
+            trackingButton.disabled = isLoading;
+            trackingCode.disabled = isLoading;
+
+            if (isLoading) {
+                trackingButton.innerHTML = `
+                    <span class="tracking-loading">
+                        <span
+                            class="tracking-loading-spinner"
+                            aria-hidden="true"
+                        ></span>
+                        Consultando...
+                    </span>
+                `;
+            } else {
+                trackingButton.innerHTML = `
+                    <i data-lucide="search"></i>
+                    <span>Consultar entrega</span>
+                `;
+
+                updateIcons();
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            result.hidden = true;
+            result.innerHTML = "";
+        }
+
+        function showNotFound(code) {
+            result.innerHTML = `
+                <div class="tracking-result-header">
+                    <i data-lucide="package-x"></i>
+
+                    <div>
+                        <h2>Entrega não encontrada</h2>
+
+                        <p class="tracking-code-result">
+                            Código consultado:
+                            ${escapeHTML(code)}
+                        </p>
+                    </div>
+                </div>
+
+                <p class="tracking-message">
+                    Confira se o código foi digitado corretamente.
+                    Caso o problema continue, entre em contato com
+                    a JL Express Logística.
+                </p>
+            `;
+
+            result.hidden = false;
+            updateIcons();
+        }
+
+        function showDelivery(code, delivery) {
+            const client = delivery.cliente || "Não informado";
+            const origin = delivery.origem || "Não informada";
+            const destination = delivery.destino || "Não informado";
+            const status = delivery.status || "Status não informado";
+            const observation =
+                delivery.observacao || "Nenhuma observação disponível";
+
+            result.innerHTML = `
+                <div class="tracking-result-header">
+                    <i data-lucide="package-check"></i>
+
+                    <div>
+                        <h2>Entrega localizada</h2>
+
+                        <p class="tracking-code-result">
+                            Código:
+                            ${escapeHTML(code)}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tracking-status">
+                    <i data-lucide="truck"></i>
+                    ${escapeHTML(status)}
+                </div>
+
+                <div class="tracking-result-grid">
+
+                    <div class="tracking-result-item">
+                        <span>Cliente</span>
+                        <strong>${escapeHTML(client)}</strong>
+                    </div>
+
+                    <div class="tracking-result-item">
+                        <span>Última atualização</span>
+                        <strong>
+                            ${escapeHTML(
+                                formatDate(delivery.ultimaAtualizacao)
+                            )}
+                        </strong>
+                    </div>
+
+                    <div class="tracking-result-item">
+                        <span>Origem</span>
+                        <strong>${escapeHTML(origin)}</strong>
+                    </div>
+
+                    <div class="tracking-result-item">
+                        <span>Destino</span>
+                        <strong>${escapeHTML(destination)}</strong>
+                    </div>
+
+                    <div class="tracking-result-item full">
+                        <span>Observação</span>
+                        <strong>${escapeHTML(observation)}</strong>
+                    </div>
+
+                </div>
+            `;
+
+            result.hidden = false;
+            updateIcons();
+        }
+
         trackingCode.addEventListener("input", function () {
-            trackingCode.value = trackingCode.value.toUpperCase();
+            this.value = this.value
+                .toUpperCase()
+                .replace(/\s+/g, "");
         });
 
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const code = trackingCode.value.trim().toUpperCase();
+            const code = trackingCode.value
+                .trim()
+                .toUpperCase()
+                .replace(/\s+/g, "");
 
-            error.textContent = "";
+            errorMessage.textContent = "";
             result.hidden = true;
+            result.innerHTML = "";
 
             if (code.length < 8) {
-                error.textContent =
-                    "Informe o código de rastreio completo.";
+                showError("Informe o código de rastreio completo.");
                 trackingCode.focus();
                 return;
             }
 
-            result.hidden = false;
+            setLoading(true);
 
-            result.innerHTML = `
-                <strong>Consulta preparada</strong>
+            try {
+                const deliveryReference = doc(
+                    db,
+                    "entregas",
+                    code
+                );
 
-                <p>
-                    Código informado: ${code}
-                </p>
+                const deliverySnapshot = await getDoc(
+                    deliveryReference
+                );
 
-                <p>
-                    Na próxima etapa, este código será consultado
-                    automaticamente na planilha da JL Express Logística.
-                </p>
-            `;
+                if (!deliverySnapshot.exists()) {
+                    showNotFound(code);
+                    return;
+                }
+
+                showDelivery(
+                    code,
+                    deliverySnapshot.data()
+                );
+
+            } catch (error) {
+                console.error(
+                    "Erro ao consultar rastreamento:",
+                    error
+                );
+
+                showError(
+                    "Não foi possível consultar a entrega agora. " +
+                    "Tente novamente em alguns instantes."
+                );
+
+            } finally {
+                setLoading(false);
+            }
         });
-    });
+
+        const codeFromURL = new URLSearchParams(
+            window.location.search
+        ).get("codigo");
+
+        if (codeFromURL) {
+            trackingCode.value = codeFromURL
+                .toUpperCase()
+                .replace(/\s+/g, "");
+        }
+
+        window.addEventListener("load", updateIcons);
+
     </script>
 
 </body>
-</html
+</html>
