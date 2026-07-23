@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel administrativo | JL Express Logística</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #082d64;
+      --blue-2: #0f478f;
+      --orange: #ff5a1f;
+      --orange-2: #ff7b22;
+      --text: #10213b;
+      --muted: #68758a;
+      --line: #dce3ec;
+      --bg: #f3f6fa;
+      --white: #fff;
+      --danger: #b42318;
+      --success: #067647;
+      --shadow: 0 18px 50px rgba(15, 35, 70, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(255, 90, 31, .22), transparent 25%),
+        linear-gradient(135deg, #061d43, #0c3978 55%, #09295c);
+    }
+
+    .login-card {
+      width: min(440px, 100%);
+      padding: 34px;
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .logo { display: block; width: 145px; margin: 0 auto 24px; }
+    .login-card h1 { margin: 0; text-align: center; font-size: 1.65rem; }
+    .login-card > p { margin: 8px 0 26px; color: var(--muted); text-align: center; }
+
+    .field { display: grid; gap: 7px; }
+    .field + .field { margin-top: 16px; }
+    .field label { font-size: .86rem; font-weight: 700; }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--blue-2);
+      box-shadow: 0 0 0 3px rgba(15, 71, 143, .12);
+    }
+
+    .field textarea { min-height: 96px; resize: vertical; }
+    .field input:disabled { background: #eef2f6; color: #586579; }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      transition: transform .15s, opacity .15s, box-shadow .15s;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { cursor: wait; opacity: .65; transform: none; }
+    .btn-primary { color: #fff; background: linear-gradient(135deg, var(--orange), var(--orange-2)); box-shadow: 0 8px 20px rgba(255, 90, 31, .22); }
+    .btn-secondary { color: var(--blue); background: #e9f0f9; }
+    .btn-danger { color: var(--danger); background: #fee4e2; }
+    .btn-small { padding: 8px 11px; font-size: .8rem; }
+    .btn-full { width: 100%; margin-top: 22px; }
+
+    .message { min-height: 22px; margin: 14px 0 0; font-size: .86rem; text-align: center; }
+    .message.error { color: var(--danger); }
+    .message.success { color: var(--success); }
+
+    .app-shell { min-height: 100vh; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px clamp(20px, 4vw, 58px);
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-brand { display: flex; align-items: center; gap: 16px; }
+    .topbar-brand img { width: 112px; }
+    .topbar-brand strong { display: block; font-size: .94rem; }
+    .topbar-brand span { color: var(--muted); font-size: .77rem; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+    .page {
+      width: min(1420px, calc(100% - 36px));
+      margin: 30px auto 60px;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.35rem); }
+    .page-heading p { margin: 5px 0 0; color: var(--muted); }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(330px, 430px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: 0 8px 28px rgba(15, 35, 70, .06);
+    }
+
+    .form-card { position: sticky; top: 96px; padding: 24px; }
+    .card-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    .card-title h2 { margin: 0; font-size: 1.15rem; }
+    .editing-badge { padding: 5px 9px; border-radius: 999px; color: #a83f00; background: #fff0e6; font-size: .72rem; font-weight: 700; }
+
+    .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .code-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+
+    .list-card { overflow: hidden; }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px; border-bottom: 1px solid var(--line); }
+    .list-toolbar h2 { margin: 0; font-size: 1.15rem; }
+    .list-toolbar p { margin: 3px 0 0; color: var(--muted); font-size: .82rem; }
+    .search-box { width: min(310px, 100%); }
+    .search-box input { width: 100%; padding: 10px 13px; border: 1px solid var(--line); border-radius: 11px; outline: none; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 790px; }
+    th, td { padding: 14px 16px; border-bottom: 1px solid #edf0f4; text-align: left; vertical-align: middle; }
+    th { color: var(--muted); background: #f8fafc; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; }
+    td { font-size: .86rem; }
+    tbody tr:hover { background: #fafcff; }
+    .code-cell { font-weight: 800; color: var(--blue); }
+    .status-pill { display: inline-block; max-width: 190px; padding: 5px 9px; border-radius: 999px; color: #8b3a05; background: #fff0e5; font-size: .75rem; font-weight: 700; }
+    .actions { display: flex; gap: 7px; }
+    .empty-state { padding: 50px 20px; color: var(--muted); text-align: center; }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 50;
+      max-width: min(390px, calc(100% - 44px));
+      padding: 13px 16px;
+      border-radius: 12px;
+      color: #fff;
+      background: #1c2b43;
+      box-shadow: var(--shadow);
+      font-size: .86rem;
+    }
+
+    .toast.error { background: var(--danger); }
+    .toast.success { background: var(--success); }
+
+    @media (max-width: 950px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .form-card { position: static; }
+    }
+
+    @media (max-width: 650px) {
+      .login-card { padding: 27px 22px; }
+      .topbar { align-items: flex-start; }
+      .topbar-brand strong, .topbar-brand span { display: none; }
+      .topbar-brand img { width: 95px; }
+      .topbar-actions .btn-secondary { display: none; }
+      .page { width: min(100% - 22px, 1420px); margin-top: 20px; }
+      .page-heading, .list-toolbar { align-items: stretch; flex-direction: column; }
+      .search-box { width: 100%; }
+      .two-cols, .form-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="login-page" id="loginView">
+    <form class="login-card" id="loginForm">
+      <img class="logo" src="assets/logo.png" alt="JL Express Logística">
+      <h1>Painel administrativo</h1>
+      <p>Acesso restrito à equipe autorizada.</p>
+
+      <div class="field">
+        <label for="loginEmail">E-mail</label>
+        <input id="loginEmail" type="email" autocomplete="username" required>
+      </div>
+
+      <div class="field">
+        <label for="loginPassword">Senha</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="loginButton" type="submit">Entrar</button>
+      <p class="message" id="loginMessage" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="app-shell" id="dashboardView" hidden>
+    <header class="topbar">
+      <div class="topbar-brand">
+        <img src="assets/logo.png" alt="JL Express Logística">
+        <div>
+          <strong>Painel de rastreamento</strong>
+          <span id="adminEmail"></span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a class="btn btn-secondary" href="rastreamento.html" target="_blank" rel="noopener">Abrir rastreamento</a>
+        <button class="btn btn-danger" id="logoutButton" type="button">Sair</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-heading">
+        <div>
+          <h1>Gerenciar entregas</h1>
+          <p>Cadastre, atualize e exclua códigos de rastreamento.</p>
+        </div>
+        <button class="btn btn-secondary" id="refreshButton" type="button">Atualizar lista</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <form class="card form-card" id="deliveryForm">
+          <div class="card-title">
+            <h2 id="formTitle">Nova entrega</h2>
+            <span class="editing-badge" id="editingBadge" hidden>Editando</span>
+          </div>
+
+          <div class="field">
+            <label for="deliveryCode">Código de rastreio</label>
+            <div class="code-row">
+              <input id="deliveryCode" type="text" minlength="8" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Ex.: JLAB7K9P2X" required>
+              <button class="btn btn-secondary" id="generateCodeButton" type="button">Gerar</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="clientName">Cliente</label>
+            <input id="clientName" type="text" maxlength="100" required>
+          </div>
+
+          <div class="two-cols">
+            <div class="field">
+              <label for="origin">Origem</label>
+              <input id="origin" type="text" maxlength="100" placeholder="Cidade - UF" required>
+            </div>
+            <div class="field">
+              <label for="destination">Destino</label>
+              <input id="destination" type="text" maxlength="100" placeholder="Cidade - UF" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="deliveryStatus">Status</label>
+            <select id="deliveryStatus" required>
+              <option value="Pedido recebido">Pedido recebido</option>
+              <option value="Coleta programada">Coleta programada</option>
+              <option value="Coletado">Coletado</option>
+              <option value="Em separação">Em separação</option>
+              <option value="Em trânsito">Em trânsito</option>
+              <option value="Chegou à unidade de destino">Chegou à unidade de destino</option>
+              <option value="Saiu para entrega">Saiu para entrega</option>
+              <option value="Entregue">Entregue</option>
+              <option value="Entrega não realizada">Entrega não realizada</option>
+              <option value="Aguardando retirada">Aguardando retirada</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="observation">Observação</label>
+            <textarea id="observation" maxlength="300" placeholder="Informação exibida ao cliente"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" id="clearButton" type="button">Limpar</button>
+            <button class="btn btn-primary" id="saveButton" type="submit">Salvar entrega</button>
+          </div>
+        </form>
+
+        <section class="card list-card">
+          <div class="list-toolbar">
+            <div>
+              <h2>Entregas cadastradas</h2>
+              <p id="deliveryCount">Carregando...</p>
+            </div>
+            <div class="search-box">
+              <input id="searchInput" type="search" placeholder="Buscar código, cliente ou destino">
+            </div>
+          </div>
+
+          <div class="table-wrap" id="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Cliente</th>
+                  <th>Destino</th>
+                  <th>Status</th>
+                  <th>Atualização</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="deliveryTableBody"></tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="emptyState" hidden>Nenhuma entrega encontrada.</div>
+        </section>
+      </div>
+    </main>
+  </section>
+
+  <div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      getDocs,
+      setDoc,
+      deleteDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCARu-R7IC6AVT8tO-6DscxWXduRuz8tNc",
+      authDomain: "jl-express-rastreio-2026-jl.firebaseapp.com",
+      projectId: "jl-express-rastreio-2026-jl",
+      storageBucket: "jl-express-rastreio-2026-jl.firebasestorage.app",
+      messagingSenderId: "868088045164",
+      appId: "1:868088045164:web:7f2d719775b06fad31c249"
+    };
+
+    const ADMIN_UID = "6OhdHk4Oz5csi3oY1FBdvlqJEI52";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginView = document.getElementById("loginView");
+    const dashboardView = document.getElementById("dashboardView");
+    const loginForm = document.getElementById("loginForm");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const adminEmail = document.getElementById("adminEmail");
+    const logoutButton = document.getElementById("logoutButton");
+    const refreshButton = document.getElementById("refreshButton");
+
+    const deliveryForm = document.getElementById("deliveryForm");
+    const deliveryCode = document.getElementById("deliveryCode");
+    const clientName = document.getElementById("clientName");
+    const origin = document.getElementById("origin");
+    const destination = document.getElementById("destination");
+    const deliveryStatus = document.getElementById("deliveryStatus");
+    const observation = document.getElementById("observation");
+    const saveButton = document.getElementById("saveButton");
+    const clearButton = document.getElementById("clearButton");
+    const generateCodeButton = document.getElementById("generateCodeButton");
+    const formTitle = document.getElementById("formTitle");
+    const editingBadge = document.getElementById("editingBadge");
+
+    const deliveryTableBody = document.getElementById("deliveryTableBody");
+    const deliveryCount = document.getElementById("deliveryCount");
+    const searchInput = document.getElementById("searchInput");
+    const tableWrap = document.getElementById("tableWrap");
+    const emptyState = document.getElementById("emptyState");
+    const toast = document.getElementById("toast");
+
+    let deliveries = [];
+    let editingCode = null;
+    let toastTimer;
+
+    function showToast(message, type = "success") {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.hidden = false;
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 3500);
+    }
+
+    function authErrorMessage(error) {
+      const messages = {
+        "auth/invalid-credential": "E-mail ou senha incorretos.",
+        "auth/invalid-email": "Informe um endereço de e-mail válido.",
+        "auth/too-many-requests": "Muitas tentativas. Aguarde alguns minutos.",
+        "auth/network-request-failed": "Falha de conexão. Verifique a internet."
+      };
+      return messages[error.code] || "Não foi possível entrar. Verifique os dados.";
+    }
+
+    function normalizeCode(value) {
+      return value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    }
+
+    function generateCode() {
+      const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      const bytes = new Uint32Array(8);
+      crypto.getRandomValues(bytes);
+      let value = "JL";
+      for (const byte of bytes) value += alphabet[byte % alphabet.length];
+      return value;
+    }
+
+    function formatTimestamp(timestamp) {
+      if (!timestamp || typeof timestamp.toDate !== "function") return "Agora";
+      return timestamp.toDate().toLocaleString("pt-BR", {
+        timeZone: "America/Fortaleza",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function resetForm() {
+      editingCode = null;
+      deliveryForm.reset();
+      deliveryStatus.value = "Pedido recebido";
+      deliveryCode.disabled = false;
+      generateCodeButton.disabled = false;
+      formTitle.textContent = "Nova entrega";
+      editingBadge.hidden = true;
+      saveButton.textContent = "Salvar entrega";
+      deliveryCode.focus();
+    }
+
+    function startEditing(item) {
+      editingCode = item.codigo;
+      deliveryCode.value = item.codigo;
+      clientName.value = item.cliente || "";
+      origin.value = item.origem || "";
+      destination.value = item.destino || "";
+      deliveryStatus.value = item.status || "Pedido recebido";
+      observation.value = item.observacao || "";
+      deliveryCode.disabled = true;
+      generateCodeButton.disabled = true;
+      formTitle.textContent = `Editar ${item.codigo}`;
+      editingBadge.hidden = false;
+      saveButton.textContent = "Atualizar entrega";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function createCell(text, className = "") {
+      const td = document.createElement("td");
+      td.textContent = text;
+      if (className) td.className = className;
+      return td;
+    }
+
+    function renderDeliveries() {
+      const term = searchInput.value.trim().toLowerCase();
+      const filtered = deliveries.filter((item) => {
+        const haystack = [item.codigo, item.cliente, item.destino, item.status]
+          .join(" ")
+          .toLowerCase();
+        return haystack.includes(term);
+      });
+
+      deliveryTableBody.replaceChildren();
+      deliveryCount.textContent = `${filtered.length} de ${deliveries.length} entrega(s)`;
+      tableWrap.hidden = filtered.length === 0;
+      emptyState.hidden = filtered.length !== 0;
+
+      for (const item of filtered) {
+        const row = document.createElement("tr");
+        row.appendChild(createCell(item.codigo, "code-cell"));
+        row.appendChild(createCell(item.cliente || "—"));
+        row.appendChild(createCell(item.destino || "—"));
+
+        const statusCell = document.createElement("td");
+        const status = document.createElement("span");
+        status.className = "status-pill";
+        status.textContent = item.status || "Não informado";
+        statusCell.appendChild(status);
+        row.appendChild(statusCell);
+
+        row.appendChild(createCell(formatTimestamp(item.ultimaAtualizacao)));
+
+        const actionCell = document.createElement("td");
+        const actionWrap = document.createElement("div");
+        actionWrap.className = "actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "btn btn-secondary btn-small";
+        editButton.textContent = "Editar";
+        editButton.addEventListener("click", () => startEditing(item));
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "btn btn-danger btn-small";
+        deleteButton.textContent = "Excluir";
+        deleteButton.addEventListener("click", () => removeDelivery(item.codigo));
+
+        actionWrap.append(editButton, deleteButton);
+        actionCell.appendChild(actionWrap);
+        row.appendChild(actionCell);
+        deliveryTableBody.appendChild(row);
+      }
+    }
+
+    async function loadDeliveries() {
+      refreshButton.disabled = true;
+      deliveryCount.textContent = "Carregando...";
+      try {
+        const snapshot = await getDocs(collection(db, "entregas"));
+        deliveries = snapshot.docs.map((item) => ({ codigo: item.id, ...item.data() }));
+        deliveries.sort((a, b) => {
+          const aTime = a.ultimaAtualizacao?.seconds || 0;
+          const bTime = b.ultimaAtualizacao?.seconds || 0;
+          return bTime - aTime;
+        });
+        renderDeliveries();
+      } catch (error) {
+        console.error("Erro ao listar entregas:", error);
+        deliveryCount.textContent = "Não foi possível carregar.";
+        showToast("Erro ao carregar as entregas.", "error");
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    async function removeDelivery(code) {
+      const confirmed = window.confirm(`Excluir definitivamente a entrega ${code}?`);
+      if (!confirmed) return;
+      try {
+        await deleteDoc(doc(db, "entregas", code));
+        if (editingCode === code) resetForm();
+        showToast(`Entrega ${code} excluída.`);
+        await loadDeliveries();
+      } catch (error) {
+        console.error("Erro ao excluir:", error);
+        showToast("Não foi possível excluir a entrega.", "error");
+      }
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      loginMessage.textContent = "";
+      loginMessage.className = "message";
+      loginButton.disabled = true;
+      loginButton.textContent = "Entrando...";
+      try {
+        await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value);
+        loginForm.reset();
+      } catch (error) {
+        loginMessage.textContent = authErrorMessage(error);
+        loginMessage.className = "message error";
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Entrar";
+      }
+    });
+
+    logoutButton.addEventListener("click", () => signOut(auth));
+    refreshButton.addEventListener("click", loadDeliveries);
+    clearButton.addEventListener("click", resetForm);
+    searchInput.addEventListener("input", renderDeliveries);
+
+    deliveryCode.addEventListener("input", () => {
+      deliveryCode.value = normalizeCode(deliveryCode.value);
+    });
+
+    generateCodeButton.addEventListener("click", () => {
+      deliveryCode.value = generateCode();
+      clientName.focus();
+    });
+
+    deliveryForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const code = normalizeCode(deliveryCode.value);
+
+      if (code.length < 8) {
+        showToast("O código precisa ter pelo menos 8 caracteres.", "error");
+        deliveryCode.focus();
+        return;
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = editingCode ? "Atualizando..." : "Salvando...";
+
+      try {
+        const reference = doc(db, "entregas", code);
+
+        if (!editingCode) {
+          const existing = await getDoc(reference);
+          if (existing.exists()) {
+            showToast("Esse código já existe. Gere outro código.", "error");
+            return;
+          }
+        }
+
+        await setDoc(reference, {
+          cliente: clientName.value.trim(),
+          origem: origin.value.trim(),
+          destino: destination.value.trim(),
+          status: deliveryStatus.value,
+          observacao: observation.value.trim(),
+          ultimaAtualizacao: serverTimestamp()
+        }, { merge: true });
+
+        showToast(editingCode ? `Entrega ${code} atualizada.` : `Entrega ${code} cadastrada.`);
+        resetForm();
+        await loadDeliveries();
+      } catch (error) {
+        console.error("Erro ao salvar:", error);
+        showToast("Não foi possível salvar a entrega.", "error");
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = editingCode ? "Atualizar entrega" : "Salvar entrega";
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        dashboardView.hidden = true;
+        loginView.hidden = false;
+        adminEmail.textContent = "";
+        return;
+      }
+
+      if (user.uid !== ADMIN_UID) {
+        await signOut(auth);
+        loginMessage.textContent = "Esta conta não tem permissão administrativa.";
+        loginMessage.className = "message error";
+        return;
+      }
+
+      loginView.hidden = true;
+      dashboardView.hidden = false;
+      adminEmail.textContent = user.email || "Administrador";
+      resetForm();
+      await loadDeliveries();
+    });
+  </script>
+</body>
+</html>
